@@ -7,8 +7,6 @@ const PrivateRoutes = ({ children }) => {
     const { user, loading } = UseAuth();
     const location = useLocation()
 
-    console.log("Auth Loading Status:", loading); // <--- এটি যোগ করুন
-    console.log("User Status:", user);
 
     if (loading) {
         return <span className="loading loading-spinner loading-lg"></span>
