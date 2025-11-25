@@ -4,11 +4,13 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import SocialLogin from '../SocailLogin/SocialLogin';
 import UseAuth from '../../../Hooks/useAuth';
 import axios from 'axios';
+import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { registerUser,updateUserProfile } = UseAuth();
 const location = useLocation();
+const axiosSecure = useAxiosSecure();
 const navigate = useNavigate();
 
   const handleRegistration = async (data) => {
@@ -26,12 +28,28 @@ const navigate = useNavigate();
 
       const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`;
       axios.post(image_API_URL, formData)
-      .then( result => {
-        console.log('after image upload', result.data.data.url)
+      .then( () => {
+        const photoURL = result.data.data.url
+// create user in the database
 
+const userInfo = {
+  email:data.email,
+  displayName:data.name,
+  photoURL:photoURL
+}
+
+axiosSecure.post('/users')
+.then(res => {
+  if(res.data.insertedId){
+    console.log('user inserted in server')
+  }
+})
+
+
+        // update user profile to firebase 
 const userProfile = {
 displayName:data.name,
-photoURL: result.data.data.url
+photoURL:photoURL
 }
 
 updateUserProfile(userProfile)
