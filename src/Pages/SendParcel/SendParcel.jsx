@@ -1,6 +1,6 @@
-import React from 'react';
+
 import { useForm, useWatch } from 'react-hook-form';
-import { useLoaderData } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import useAuth from '../../Hooks/useAuth'
@@ -19,12 +19,13 @@ const {user} = useAuth()
     const regionsDuplicate = serviceCenters.map(c => c.region)
     const regions = [...new Set(regionsDuplicate)]
     // const senderRegion = watch('senderRegion')
+    
     const senderRegion = useWatch({ control, name: 'senderRegion' })
 
 
     const recieverRegion = useWatch({ control, name: "recieverRegion" })
 
-
+const navigate = useNavigate();
 
     const districtByRegion = region => {
 
@@ -64,23 +65,28 @@ Swal.fire({
   showCancelButton: true,
   confirmButtonColor: "#3085d6",
   cancelButtonColor: "#d33",
-  confirmButtonText: "Yes, I am ready to pay"
+  confirmButtonText: "Confirm and countinue payment"
 }).then((result) => {
   if (result.isConfirmed) {
 
 axiosSecure.post('/parcels',data)
 .then(result => {
     console.log('after saving parcel',result.data)
+    if(result.data.insertedId){
+Swal.fire({
+  position: "top-end",
+  icon: "success",
+  title: "Parcel has created. Please pay",
+  showConfirmButton: false,
+  timer: 1500
+});
+navigate('/dashboard/my-parcels')
+    }
 })
 .catch(error => {
     console.log(error)
 })
 
-    // Swal.fire({
-    //   title: "Deleted!",
-    //   text: "Your file has been deleted.",
-    //   icon: "success"
-    // });
   }
 });
     }

@@ -8,17 +8,26 @@ import { FaSearch } from "react-icons/fa";
 import Swal from 'sweetalert2';
 import { Link } from 'react-router';
 
-const MyParcels = () => {
+const MyParcels =  () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
-    const { data: parcels = [] , refetch} = useQuery({
-        queryKey: ['myParcels', user?.email],
-        queryFn: async () => {
 
-            const res = await axiosSecure.get(`/parcels?email=${user?.email}`)
-            return res.data;
-        }
-    })
+const {data: parcels=[], refetch} =useQuery({
+    queryKey: ['myParcels', user?.email], 
+    queryFn:async ()=>{
+        const res = await axiosSecure.get(`/parcels?email=${user.email}`)
+        return res.data;
+    }
+})
+
+    // const { data: parcels = [] , refetch} = useQuery({
+    //     queryKey: ['myParcels', user?.email],
+    //     queryFn: async () => {
+
+    //         const res = await axiosSecure.get(`/parcels?email=${user?.email}`)
+    //         return res.data;
+    //     }
+    // })
 const handleParcelDelete = id => {
 
 Swal.fire({
@@ -58,6 +67,19 @@ refetch()
 
 }
 
+const handlePayment = async(parcel)=>{
+
+const paymentInfo = {
+    cost: parcel.cost,
+    parcelId: parcel._id,
+    senderEmail: parcel.senderEmail,
+    parcelName: parcel.parcelName,
+}
+
+const res = await axiosSecure.post('/payment-checkout-session', paymentInfo);
+window.location.assign(res.data.url)
+
+}
 
     return (
         <div>
@@ -83,7 +105,7 @@ refetch()
                                 <td>{parcel.cost}</td>
                                 <td>
                                     {
-                                        parcel.paymentStatus === 'paid' ? <span className='text-green-400'></span> : <Link to={`payment/${parcel._id}`}><button className="btn btn-small btn-primary">Pay</button></Link>
+                                        parcel.paymentStatus === 'paid' ? <span className='text-green-400'>Paid</span> : <button onClick={()=>handlePayment(parcel)} className="btn btn-small btn-primary">Pay</button>
                                     }
                                 </td>
                                 <td>
