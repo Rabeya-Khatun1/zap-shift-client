@@ -38,7 +38,7 @@ const userInfo = {
   photoURL:photoURL
 }
 
-axiosSecure.post('/users')
+axiosSecure.post('/users',userInfo)
 .then(res => {
   if(res.data.insertedId){
     console.log('user inserted in server')

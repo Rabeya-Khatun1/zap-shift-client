@@ -13,6 +13,7 @@ const links = (
     <li><Link>Career</Link></li>
     <li><Link to='/coverage'>Coverage</Link></li>
     <li><Link to='/send-parcel'>Send Parcel</Link></li>
+    <li><Link to='/rider'>Be a Rider</Link></li>
 
     {user && (
       <li><Link to='/dashboard'>My Parcels</Link></li>
