@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, NavLink, Outlet } from 'react-router';
 import { CiDeliveryTruck } from "react-icons/ci";
-import { FaMotorcycle, FaRegCreditCard } from 'react-icons/fa';
+import { FaMotorcycle, FaRegCreditCard, FaUser } from 'react-icons/fa';
 
 const DashboardLayout = () => {
     return (
@@ -50,6 +50,11 @@ const DashboardLayout = () => {
   <FaMotorcycle />
 
   <span className="is-drawer-close:hidden">Payment History</span>
+  </NavLink></li>
+<li><NavLink className='is-drawer-close:tooltip is-drawer-close:tooltip-right' data-tip="User Management" to='users-management'>
+  <FaUser></FaUser> 
+
+  <span className="is-drawer-close:hidden">User Management</span>
   </NavLink></li>
 
         {/* List item */}

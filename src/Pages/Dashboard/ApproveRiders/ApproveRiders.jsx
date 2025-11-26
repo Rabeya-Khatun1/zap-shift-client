@@ -1,11 +1,14 @@
-import React from 'react';
+
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query'
-import { FaTrashCan, FaUserCheck } from "react-icons/fa6";
+import { FaRegEye, FaTrashCan, FaUserCheck } from "react-icons/fa6";
 import { IoPersonRemoveSharp } from "react-icons/io5";
 import Swal from 'sweetalert2';
+import { Link } from 'react-router';
+
 
 const ApproveRiders = () => {
+
 
     const axiosSecure = useAxiosSecure();
 
@@ -16,7 +19,7 @@ const ApproveRiders = () => {
             return res.data;
         }
     })
-   
+
 
 const updateRiderStatus =(rider ,status)=> {
 
@@ -67,7 +70,40 @@ const handleRejection = (rider)=>{
 
     refetch();
 }
-    return (
+  
+const handleDeleteRider = (id) =>{
+
+axiosSecure.delete(`/riders/${id}`)
+.then(res => {
+    console.log('resdata', res.data)
+    
+
+Swal.fire({
+  title: "Are you sure?",
+  text: "You won't be able to revert this!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, delete it!"
+}).then((result) => {
+if(res.data.deletedCount){
+refetch()
+    }
+  if (result.isConfirmed) {
+    Swal.fire({
+      title: "Deleted!",
+      text: "Your file has been deleted.",
+      icon: "success"
+    });
+  }
+});
+    
+})
+
+}
+
+return (
         <div>
             <h3 className='text-secondary text-5xl font-bold'>Riders Pending Approval: {riders.length}</h3>
 
@@ -96,9 +132,12 @@ const handleRejection = (rider)=>{
 }</td>
                                     <td>{rider.district}</td>
                                     <td>
+
+                                        <button 
+                                        className='btn'><Link to={`/riders/${rider._id}`}><FaRegEye /></Link></button>
                                         <button onClick={()=>handleApporoval(rider)} className='btn'><FaUserCheck /></button>
                                         <button onClick={()=>handleRejection(rider)} className='btn'><IoPersonRemoveSharp /></button>
-                                        <button className='btn'><FaTrashCan></FaTrashCan></button>
+                                        <button onClick={()=> handleDeleteRider(rider._id)} className='btn'><FaTrashCan></FaTrashCan></button>
                                     </td>
                                 </tr>
                             )

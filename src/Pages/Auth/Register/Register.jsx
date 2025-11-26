@@ -28,7 +28,7 @@ const navigate = useNavigate();
 
       const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`;
       axios.post(image_API_URL, formData)
-      .then( () => {
+      .then( (result) => {
         const photoURL = result.data.data.url
 // create user in the database
 
