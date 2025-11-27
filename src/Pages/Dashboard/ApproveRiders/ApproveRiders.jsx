@@ -21,31 +21,38 @@ const ApproveRiders = () => {
     })
 
 
-const updateRiderStatus =(rider ,status)=> {
-
-    const updateInfo = {status:status, email:rider.email}
-
-axiosSecure.patch(`/riders/${rider._id}`, updateInfo)
-.then(res => {
-    console.log(res.data)
-    if(res.data.modifiedCount){
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success', 
-                    title:`Rider has been ${status}`,
-                    showConfirmButton:false,
-                    timer:1500,
-                })
-        
+const updateRiderStatus = async (rider, status) => {
+    const updateInfo = { status: status, email: rider.email }
+    try {
+        const res = await axiosSecure.patch(`/riders/${rider._id}`, updateInfo)
+        console.log(res.data)
+        if(res.data.modifiedCount){
+            await Swal.fire({  // await important
+                position: 'top-end',
+                icon: 'success', 
+                title:`Rider Marked As ${status}`,
+                showConfirmButton:false,
+                timer:1500,
+            })
+        }
+    } catch(err){
+        console.log(err)
+        await Swal.fire({
+            position: 'top-end',
+            icon: 'error', 
+            title:'Something went wrong',
+            showConfirmButton:false,
+            timer:1500,
+        })
     }
-})
-
 }
 
+
+
 const handleApporoval = (rider) =>{
-   
-updateRiderStatus(rider, 'approved')
- refetch();
+    refetch();
+ updateRiderStatus(rider, 'approved')
+
 //     const updateInfo = {status:'approved'}
 
 // axiosSecure.patch(`/riders/${id}`, updateInfo)
@@ -65,10 +72,10 @@ updateRiderStatus(rider, 'approved')
 }
 
 const handleRejection = (rider)=>{
-
+   refetch();
     updateRiderStatus(rider, 'rejected')
 
-    refetch();
+ 
 }
   
 const handleDeleteRider = (id) =>{

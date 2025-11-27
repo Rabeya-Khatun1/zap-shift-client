@@ -38,6 +38,18 @@ const handleMakeUser = user=>{
 
 const handleRemoveAdmin = user => {
     const roleInfo = {role: 'user'};
+
+//TODO: must ask for confirmation before proceed 
+
+Swal.fire({
+  title: "Are you sure?",
+  text: "You won't be able to revert this!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, delete it!"
+})
     axiosSecure.patch(`/users/${user._id}`, roleInfo)
     .then( res => {
         if(res.data.modifiedCount){
