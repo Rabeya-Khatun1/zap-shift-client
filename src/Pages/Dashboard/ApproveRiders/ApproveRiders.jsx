@@ -50,9 +50,9 @@ const updateRiderStatus = async (rider, status) => {
 
 
 const handleApporoval = (rider) =>{
-    refetch();
+  
  updateRiderStatus(rider, 'approved')
-
+  refetch();
 //     const updateInfo = {status:'approved'}
 
 // axiosSecure.patch(`/riders/${id}`, updateInfo)

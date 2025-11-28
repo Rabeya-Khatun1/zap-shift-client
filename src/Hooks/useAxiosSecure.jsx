@@ -28,7 +28,7 @@ useEffect( ()=>{
     }, (err)=>{
 
 
-        const statusCode = err.status;
+        const statusCode = err.response?.status;
         if(statusCode === 401 || statusCode === 403){
  logOut()
  .then(result=> {

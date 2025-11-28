@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, NavLink, Outlet } from 'react-router';
 import { CiDeliveryTruck } from "react-icons/ci";
-import { FaMotorcycle, FaRegCreditCard, FaUser } from 'react-icons/fa';
+import { FaMotorcycle, FaRegCreditCard, FaTasks, FaUser } from 'react-icons/fa';
 import { RiEBikeFill } from "react-icons/ri";
 import useRole from '../Hooks/useRole';
 
@@ -51,6 +51,21 @@ console.log('role of rabeya', role)
 
   <span className="is-drawer-close:hidden">Payment History</span>
   </NavLink></li>
+
+{/* only for riders  */}
+
+{
+  role === 'rider' && <>
+  <li><NavLink className='is-drawer-close:tooltip is-drawer-close:tooltip-right' data-tip="Assign deliverys" to='assigned-deliverys'>
+  <FaTasks />
+
+  <span className="is-drawer-close:hidden">Assigned Delivery</span>
+  </NavLink></li>
+  </>
+}
+
+
+{/* only for admin  */}
 {
 role === 'admin' && 
 <>
