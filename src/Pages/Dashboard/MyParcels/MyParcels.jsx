@@ -93,6 +93,7 @@ window.location.assign(res.data.url)
                             <th>Name</th>
                             <th>Cost</th>
                             <th>Payment</th>
+                            <th>Tracking ID</th>
                             <th>Delivery status</th>
                             <th>Actions</th>
                         </tr>
@@ -107,6 +108,9 @@ window.location.assign(res.data.url)
                                     {
                                         parcel.paymentStatus === 'paid' ? <span className='text-green-400'>Paid</span> : <button onClick={()=>handlePayment(parcel)} className="btn btn-small btn-primary">Pay</button>
                                     }
+                                </td>
+                                <td>
+                                    {parcel.trackingIdD}
                                 </td>
                                 <td>
                                     {parcel.deliveryStatus}

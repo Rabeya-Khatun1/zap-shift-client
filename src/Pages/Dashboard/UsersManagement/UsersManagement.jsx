@@ -89,6 +89,7 @@ Swal.fire({
   </svg>
   <input
    type="search"
+   value={searchText}
   onChange={(e)=>setSearchText(e.target.value)}
     required 
     placeholder="Search Users" />

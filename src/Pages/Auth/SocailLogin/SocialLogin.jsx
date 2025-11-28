@@ -4,53 +4,58 @@ import { useLocation, useNavigate } from 'react-router';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 
 const SocialLogin = () => {
+  const { signInUserGoogle } = UseAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
-    const {signInUserGoogle } = UseAuth()
-const location = useLocation();
-const navigate = useNavigate();
-const axiosSecure = useAxiosSecure();
-const handleGoogleSignIn = ()=>{
+  const handleGoogleSignIn = async () => {
+    try {
+      // 1. Firebase Google Sign-in
+      const result = await signInUserGoogle();
+      const loggedInUser = result.user;
 
-signInUserGoogle()
-.then(result => {
-    console.log(result.user)
+      if (!loggedInUser) throw new Error("Firebase did not return a user");
 
+      // 2. Prepare user info for DB
+      const userInfo = {
+        email: loggedInUser.email,
+        displayName: loggedInUser.displayName,
+        photoURL: loggedInUser.photoURL
+      };
 
-const userInfo = {
-    email: result.user.email,
-    displayName: result.user.displayName,
-    photoURL: result.user.photoURL
-}
+      // 3. Save or update user in DB
+      const res = await axiosSecure.post('/users', userInfo);
+      console.log('User data saved in DB:', res.data);
 
-axiosSecure.post('/users', userInfo)
-.then(res => {
-    console.log('usre data has been restored',res.data)
+      // 4. Navigate after login
+      navigate(location?.state?.from || '/');
 
-    navigate(location?.state || '/')
+    } catch (error) {
+      console.error("Google Sign-in failed:", error);
+    }
+  };
 
-})
+  return (
+    <div>
+      <div className='divider'>
+        <p className='text-center font-bold'>OR</p>
+      </div>
 
-
-})
-.catch(error => {
-    console.log(error)
-})
-
-}
-
-    return (
-        <div>
-            <div className='divider'>
-                 <p className='text-center font-bold'>OR</p>
-            </div>
-           
-            {/* Google */}
-<button onClick={handleGoogleSignIn} className="btn bg-white w-full text-black border-[#e5e5e5]">
-  <svg aria-label="Google logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path d="m0 0H512V512H0" fill="#fff"></path><path fill="#34a853" d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"></path><path fill="#4285f4" d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"></path><path fill="#fbbc02" d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"></path><path fill="#ea4335" d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"></path></g></svg>
-  Login with Google
-</button>
-        </div>
-    );
+      <button onClick={handleGoogleSignIn} className="btn bg-white w-full text-black border-[#e5e5e5]">
+        <svg aria-label="Google logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <g>
+            <path d="m0 0H512V512H0" fill="#fff"></path>
+            <path fill="#34a853" d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"></path>
+            <path fill="#4285f4" d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"></path>
+            <path fill="#fbbc02" d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"></path>
+            <path fill="#ea4335" d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"></path>
+          </g>
+        </svg>
+        Login with Google
+      </button>
+    </div>
+  );
 };
 
 export default SocialLogin;
