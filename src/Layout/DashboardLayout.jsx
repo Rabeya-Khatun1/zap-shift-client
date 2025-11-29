@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, NavLink, Outlet } from 'react-router';
 import { CiDeliveryTruck } from "react-icons/ci";
-import { FaMotorcycle, FaRegCreditCard, FaTasks, FaUser } from 'react-icons/fa';
+import { FaMotorcycle, FaRegCreditCard, FaTasks, FaUser, } from 'react-icons/fa';
 import { RiEBikeFill } from "react-icons/ri";
+import { MdOutlineTaskAlt } from "react-icons/md";
 import useRole from '../Hooks/useRole';
 
 const DashboardLayout = () => {
@@ -60,6 +61,11 @@ console.log('role of rabeya', role)
   <FaTasks />
 
   <span className="is-drawer-close:hidden">Assigned Delivery</span>
+  </NavLink></li>
+  <li><NavLink className='is-drawer-close:tooltip is-drawer-close:tooltip-right' data-tip="Completed Deliveries" to='completed-deliveries'>
+  <MdOutlineTaskAlt />
+
+  <span className="is-drawer-close:hidden">Completed Deliveries</span>
   </NavLink></li>
   </>
 }

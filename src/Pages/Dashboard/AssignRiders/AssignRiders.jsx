@@ -9,11 +9,11 @@ const AssignRiders = () => {
 
     const [selectedParcel, setSelectedParcel] = useState(null);
     const axiosSecure = useAxiosSecure();
-    const { data: parcels = [], } = useQuery({
+    const { data: parcels = [],refetch: parcelRefetch } = useQuery({
 
         queryKey: ['parcels', 'pending-pickup'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/parcels?delivery-status=pending-pickup')
+            const res = await axiosSecure.get('/parcels?deliveryStatus=pending-pickup')
             return res.data;
         }
     })
@@ -23,7 +23,7 @@ const AssignRiders = () => {
     // console.log(senderDistrict)
 
     // Todo: invalidate query after assigning a rider
-    const { data: riders = [] ,refetch: parcelRefetch } = useQuery({
+    const { data: riders = [] , } = useQuery({
         queryKey: ['riders', selectedParcel?.senderDistrict],
         enabled: !!selectedParcel,
         queryFn: async () => {
@@ -40,6 +40,7 @@ const AssignRiders = () => {
             riderEmail: rider.email,
             riderName: rider.name,
             parcelId: selectedParcel._id,
+            trackingId:selectedParcel.trackingId
 
         }
         axiosSecure.patch(`/parcels/${selectedParcel._id}`, riderAssignInfo)
