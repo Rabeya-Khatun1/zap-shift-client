@@ -74,6 +74,7 @@ const paymentInfo = {
     parcelId: parcel._id,
     senderEmail: parcel.senderEmail,
     parcelName: parcel.parcelName,
+    trackingId: parcel.trackingId
 }
 
 const res = await axiosSecure.post('/payment-checkout-session', paymentInfo);
@@ -110,7 +111,7 @@ window.location.assign(res.data.url)
                                     }
                                 </td>
                                 <td>
-                                    {parcel.trackingIdD}
+                                  <Link to={`/parcel-track/${parcel.trackingId}`}>  {parcel.trackingId}</Link>
                                 </td>
                                 <td>
                                     {parcel.deliveryStatus}

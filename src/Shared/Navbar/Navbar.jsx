@@ -16,7 +16,9 @@ const links = (
     <li><Link to='/rider'>Be a Rider</Link></li>
 
     {user && (
-      <li><Link to='/dashboard'>My Parcels</Link></li>
+      <>
+      <li><Link to='my-parcels'>My Parcels</Link></li>
+      <li><Link to='/dashboard'>Dashboard</Link></li></>
     )}
   </>
 )
