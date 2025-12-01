@@ -9,7 +9,7 @@ const useAxiosSecure = () => {
 const {user, logOut} = UseAuth();
 const navigate = useNavigate();
 const axiosSecure = axios.create({
-    baseURL:'http://localhost:5000'
+    baseURL:'https://zap-shift-server-topaz.vercel.app'
 })
 
 
